@@ -1,0 +1,115 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+// Book Data Structure
+struct Book {
+    std::string title;
+    std::string author;
+    std::string ISBN;
+    bool available;
+};
+
+// Catalog Management
+std::vector<Book> libraryCatalog;
+
+// Function to add new books to the library catalog
+void addBook() {
+    Book newBook;
+    std::cout << "Enter book title: ";
+    std::getline(std::cin, newBook.title);
+    std::cout << "Enter book author: ";
+    std::getline(std::cin, newBook.author);
+    std::cout << "Enter book ISBN: ";
+    std::getline(std::cin, newBook.ISBN);
+    newBook.available = true; // Newly added books are initially available
+    libraryCatalog.push_back(newBook);
+    std::cout << "Book added to the catalog.\n";
+}
+
+// Function to remove books from the catalog
+void removeBook() {
+    std::string criteria;
+    std::cout << "Enter the title or ISBN of the book to remove: ";
+    std::getline(std::cin, criteria);
+
+    for (auto it = libraryCatalog.begin(); it != libraryCatalog.end(); ++it) {
+        if (it->title == criteria || it->ISBN == criteria) {
+            libraryCatalog.erase(it);
+            std::cout << "Book removed from the catalog.\n";
+            return;
+        }
+    }
+
+    std::cout << "Book not found in the catalog.\n";
+}
+
+// Function to check the availability of a book
+void checkAvailability() {
+    std::string criteria;
+    std::cout << "Enter the title or ISBN of the book to check availability: ";
+    std::getline(std::cin, criteria);
+
+    for (const auto& book : libraryCatalog) {
+        if (book.title == criteria || book.ISBN == criteria) {
+            std::cout << "Book is " << (book.available ? "available" : "not available") << ".\n";
+            return;
+        }
+    }
+
+    std::cout << "Book not found in the catalog.\n";
+}
+
+// Function to display the library's catalog
+void displayCatalog() {
+    if (libraryCatalog.empty()) {
+        std::cout << "The catalog is empty.\n";
+    } else {
+        std::cout << "Library Catalog:\n";
+        for (const auto& book : libraryCatalog) {
+            std::cout << "Title: " << book.title << "\n";
+            std::cout << "Author: " << book.author << "\n";
+            std::cout << "ISBN: " << book.ISBN << "\n";
+            std::cout << "Availability: " << (book.available ? "Available" : "Not Available") << "\n\n";
+        }
+    }
+}
+
+// User Interface
+int main() {
+    int choice;
+
+    do {
+        std::cout << "Library Management System\n";
+        std::cout << "1. Add Book\n";
+        std::cout << "2. Remove Book\n";
+        std::cout << "3. Check Availability\n";
+        std::cout << "4. Display Catalog\n";
+        std::cout << "5. Exit\n";
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+        std::cin.ignore(); // Consume newline left in the input buffer
+
+        switch (choice) {
+            case 1:
+                addBook();
+                break;
+            case 2:
+                removeBook();
+                break;
+            case 3:
+                checkAvailability();
+                break;
+            case 4:
+                displayCatalog();
+                break;
+            case 5:
+                std::cout << "Exiting the program.\n";
+                break;
+            default:
+                std::cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
